@@ -1,0 +1,3 @@
+StationId, StationName, StationMap, LegendConfig
+admiralty, Admiralty Station, maps/Admiralty.json, legends/Admiralty_legend.json
+mongkok, Mongkok Station, maps/Mongkok.json, legends/Mongkok_legend.json
