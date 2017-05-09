@@ -41,6 +41,25 @@ def get_realtime_data():
     data = dataService.get_recent_records(start_time / 1000, time_range / 1000)
     return json.dumps(data)
 
+# getRecordWithTimeRange
+@app.route('/getStationRecord',  methods = ['GET'])
+def get_station_record():
+    with open('config/point_positions.csv', 'r') as input:
+        line = input.readline()
+        schemas = line.split(' ')
+        schemas = [schema.strip() for schema in schemas]
 
+        line = input.readline()
+        station_records = []
+
+        while line:
+            segs = line.split()
+            segs = [seg.strip() for seg in segs]
+            stationObj = {}
+            for i in range(0, len(schemas)):
+                stationObj[schemas[i]] = segs[i]
+            station_records.append(stationObj)
+            line = input.readline()
+    return json.dumps(station_records)
 if __name__ == '__main__':
     pass
