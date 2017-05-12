@@ -93,6 +93,19 @@ class DataService:
         # print(recent_arr)
         return recent_arr
 
+    def get_people_count(self, day, t):
+        """
+        This function is used to retrieve the people count collection from MongoDB.
+        Created by Qing Du (q.du@ust.hk)
+        """
+        collection = self.db['people_count']
+        max_count = collection.find().sort('count', pymongo.DESCENDING).limit(1)[0]['count']
+        result = {}
+        result['max_count'] = max_count
+        for record in collection.find({'day': day, 'time': t}):
+            result[record['station_ID']] = record['count']
+        return result
+
 
 if __name__ == '__main__':
     dataService = DataService(None)

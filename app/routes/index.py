@@ -61,5 +61,15 @@ def get_station_record():
             station_records.append(stationObj)
             line = input.readline()
     return json.dumps(station_records)
+
+# getPeopleCount (Added by Qing Du)
+@app.route('/getPeopleCount', methods = ['POST'])
+def get_people_count():
+    get_data = json.loads(request.data.decode())
+    day = get_data['day']
+    time = get_data['time']
+    data = dataService.get_people_count(day, time)
+    return json.dumps(data)
+    
 if __name__ == '__main__':
     pass
