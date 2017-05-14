@@ -44,7 +44,7 @@ def get_realtime_data():
 # getRecordWithTimeRange
 @app.route('/getStationRecord',  methods = ['GET'])
 def get_station_record():
-    with open('config/point_positions.csv', 'r') as input:
+    with open('config/point_positions2.csv', 'r') as input:
         line = input.readline()
         schemas = line.split(' ')
         schemas = [schema.strip() for schema in schemas]
