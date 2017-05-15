@@ -66,7 +66,7 @@ class DataService:
                 'legendConfig': legend_config}
 
     def get_recent_records(self, start, time_range):
-        collection = self.db['posts']
+        collection = self.db['posts'] # people_activity
         num = 0
         recent_arr = []
         start_time = time.time()
