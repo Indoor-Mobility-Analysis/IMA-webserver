@@ -4,4 +4,4 @@ from app import app
 try:
     app.run(use_reloader=False, debug=True)
 except:
-    print("Some thing wrong!")
+    print("Some thing w rong!")
