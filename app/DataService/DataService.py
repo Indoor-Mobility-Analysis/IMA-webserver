@@ -65,8 +65,8 @@ class DataService:
                 'stationId': station_id,
                 'legendConfig': legend_config}
 
-    def get_recent_records(self, start, time_range):
-        collection = self.db['mapping.people_activity'] # people_activity / posts
+    def get_recent_records_single_collection(self, c_name, start, time_range):
+        collection = self.db[c_name] # people_activity / posts
         num = 0
         recent_arr = []
         start_time = time.time()
@@ -76,22 +76,23 @@ class DataService:
                 '$lt': (start + time_range)
             }
         }).sort('time_stamp', pymongo.ASCENDING):
-            del record['_id']
-            del record['map_data']
-            # tmp1 = record['small_clusters'].lstrip('[(').rstrip(')]').split('), (')
-            # tmp2 = [x.split(',') for x in tmp1]
-            # tmp3 = []
-            # for item in tmp2:
-            #     if len(item) == 6:
-            #         tmp3.append([int(item[0]), int(item[1]), float(item[2]), float(item[3]), float(item[4]), item[5].strip()])
-            # # print(tmp3)
-            # record['small_clusters'] = tmp3
+            if "_id" in record:
+                del record['_id']
+            if "_id" in record:
+                del record['map_data']
             recent_arr.append(record)
-        # recent_arr = sorted(recent_arr, key=lambda tup: tup['time_stamp'], reverse=False)
 
-        print('time', len(recent_arr), time.time() - start_time)
-        # print(recent_arr)
         return recent_arr
+
+    def get_recent_records(self, start, time_range):
+        people_activity = self.get_recent_records_single_collection('people_activity', start, time_range)
+        ticket_record = self.get_recent_records_single_collection('tickets_ADM', start, time_range)
+
+        return {
+            'people_activity': people_activity,
+            'ticket_record': ticket_record
+        }
+
 
     def get_people_count(self, day, ttt):
         """

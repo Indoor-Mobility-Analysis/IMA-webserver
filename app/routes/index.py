@@ -70,6 +70,7 @@ def get_people_count():
     time = get_data['time']
     data = dataService.get_people_count(day, time)
     return json.dumps(data)
-    
+
+
 if __name__ == '__main__':
     pass
