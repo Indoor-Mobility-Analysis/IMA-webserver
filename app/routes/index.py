@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
-from app import app
+# from app import app
+from app import *
 import json
 from app.DataService.DataService import DataService
 from flask import request
@@ -71,6 +72,26 @@ def get_people_count():
     data = dataService.get_people_count(day, time)
     return json.dumps(data)
 
+
+
+def background_thread():
+    """Example of how to send server generated events to clients."""
+    count = 0
+    while True:
+        socketio.sleep(10)
+        count += 1
+        print('emit')
+        socketio.emit('my_response',
+                      {'data': 'Server generated event', 'count': count},
+                      namespace='/test')
+#
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    global thread
+    if thread is None:
+        thread = socketio.start_background_task(target=background_thread)
+    emit('my_response', {'data': 'Connected', 'count': 0})
 
 if __name__ == '__main__':
     pass
