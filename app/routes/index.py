@@ -97,8 +97,8 @@ def test_connect():
         thread = socketio.start_background_task(target=background_thread)
 
 @socketio.on('client_depart', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
+def test_disconnect(data):
+    print('Client disconnected', data)
     disconnect()
 
 @socketio.on('client_join', namespace='/test')
