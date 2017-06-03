@@ -5,10 +5,11 @@ import json
 from app.DataService.DataService import DataService
 from flask import request
 
-
+start_time = 0
+time_gap = 5
 dataService = DataService('config.txt')
-print('here')
 
+station_ids = ['admiralty']
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
@@ -19,7 +20,6 @@ def getStationConfig():
 
 @app.route('/getStationMap',  methods = ['POST'])
 def get_map():
-    print('test')
     post_data = json.loads(request.data.decode())
     station_id = post_data['StationId']
     map = dataService.get_map(station_id)
@@ -39,6 +39,7 @@ def get_realtime_data():
     station_id = post_data['StationId']
     start_time = post_data['starttime']
     time_range = post_data['timerange']
+    print("Timing: ", start_time / 1000, time_range / 1000);
     data = dataService.get_recent_records(start_time / 1000, time_range / 1000)
     return json.dumps(data)
 
@@ -72,26 +73,39 @@ def get_people_count():
     data = dataService.get_people_count(day, time)
     return json.dumps(data)
 
-
-
 def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
+    global start_time
     while True:
-        socketio.sleep(10)
+        socketio.sleep(3)
         count += 1
-        print('emit')
-        socketio.emit('my_response',
-                      {'data': 'Server generated event', 'count': count},
-                      namespace='/test')
+        print("Timing: ", start_time, time_gap)
+        data = dataService.get_recent_records(start_time, time_gap)
+        start_time += 3
+        for station_name in station_ids:
+            socketio.emit('my_response',
+                      {'data': data, 'count': count},
+                      namespace='/test', room=station_name)
 #
 
 @socketio.on('connect', namespace='/test')
 def test_connect():
+    print('CONNECTED')
     global thread
     if thread is None:
         thread = socketio.start_background_task(target=background_thread)
-    emit('my_response', {'data': 'Connected', 'count': 0})
+
+@socketio.on('client_depart', namespace='/test')
+def test_disconnect():
+    print('Client disconnected')
+    disconnect()
+
+@socketio.on('client_join', namespace='/test')
+def client_join_room(data):
+    join_room(data['station_id'])
+    print('join_room', data['station_id'])
+    emit('join_successful')
 
 if __name__ == '__main__':
     pass
