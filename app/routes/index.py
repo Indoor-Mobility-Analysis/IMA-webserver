@@ -83,6 +83,7 @@ def background_thread():
         print("Timing: ", start_time, time_gap)
         data = dataService.get_recent_records(start_time, time_gap)
         start_time += 3
+
         for station_name in station_ids:
             socketio.emit('my_response',
                       {'data': data, 'count': count},
@@ -99,6 +100,7 @@ def test_connect():
 @socketio.on('client_depart', namespace='/test')
 def test_disconnect(data):
     print('Client disconnected', data)
+    print("rooms", rooms())
     disconnect()
 
 @socketio.on('client_join', namespace='/test')
@@ -106,6 +108,6 @@ def client_join_room(data):
     join_room(data['station_id'])
     print('join_room', data['station_id'])
     emit('join_successful')
-
+    print("rooms", rooms())
 if __name__ == '__main__':
     pass
