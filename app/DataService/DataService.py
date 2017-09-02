@@ -3,6 +3,8 @@ import time
 import json
 from pymongo import MongoClient
 import pymongo
+import numpy as np
+
 HOST = '127.0.0.1'
 PORT = 27017
 DB = 'mapping'
@@ -78,14 +80,25 @@ class DataService:
         }).sort('time_stamp', pymongo.ASCENDING):
             if "_id" in record:
                 del record['_id']
-            if "_id" in record:
+            if "map_data" in record:
                 del record['map_data']
+            # small cluster
+            if "small_clusters" in record:
+                for index,c in enumerate(record['small_clusters']):
+                    # record['small_clusters'][index] = c[:-1]
+                    # print('len', len(record['small_clusters'][index][len(c) - 1]))
+
+                    r_path = record['small_clusters'][index][len(c)-1]
+                    if type(r_path) == type(0.1) or r_path == None:
+                        record['small_clusters'][index][len(c) - 1] = None
+
             recent_arr.append(record)
 
         return recent_arr
 
     def get_recent_records(self, start, time_range):
-        people_activity = self.get_recent_records_single_collection('people_activity', start, time_range)
+        people_activity = self.get_recent_records_single_collection('people_activity_0524_path3', start, time_range)
+        # people_activity = self.get_recent_records_single_collection('people_activity_0524_path', start, time_range)
         ticket_record = self.get_recent_records_single_collection('tickets_ADM', start, time_range)
 
         return {

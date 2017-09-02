@@ -76,6 +76,7 @@ def get_people_count():
 def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
+    print('run here')
     global start_time
     while True:
         socketio.sleep(3)
@@ -83,6 +84,11 @@ def background_thread():
         print("Timing: ", start_time, time_gap)
         data = dataService.get_recent_records(start_time, time_gap)
         start_time += 3
+        # print('data', data)
+        # print('\n\n')
+        if count <= 3:
+            with open("test3.json", 'w') as output:
+                output.write(json.dumps(data))
 
         for station_name in station_ids:
             socketio.emit('my_response',
