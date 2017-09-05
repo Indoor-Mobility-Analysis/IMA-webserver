@@ -86,9 +86,7 @@ def background_thread():
         start_time += 3
         # print('data', data)
         # print('\n\n')
-        if count <= 3:
-            with open("test3.json", 'w') as output:
-                output.write(json.dumps(data))
+
 
         for station_name in station_ids:
             socketio.emit('my_response',

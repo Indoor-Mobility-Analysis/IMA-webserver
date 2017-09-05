@@ -94,7 +94,7 @@ class DataService:
                     # print('len', len(record['small_clusters'][index][len(c) - 1]))
 
                     r_path = record['small_clusters'][index][len(c)-1]
-                    if type(r_path) == type(0.1) or r_path == None:
+                    if type(r_path) is not list:
                         record['small_clusters'][index][len(c) - 1] = None
                     if len(record['small_clusters'][index]) != 0:
                         record['small_clusters'][index].append(vag_ppl_cnt)
@@ -105,7 +105,7 @@ class DataService:
 
     def get_recent_records(self, start, time_range):
         # people_activity = self.get_recent_records_single_collection('people_activity', start, time_range)
-        people_activity = self.get_recent_records_single_collection('people_activity_0524_path3', start, time_range)
+        people_activity = self.get_recent_records_single_collection('people_activity_600', start, time_range)
         ticket_record = self.get_recent_records_single_collection('tickets_ADM', start, time_range)
 
         return {
