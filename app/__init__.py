@@ -11,16 +11,9 @@ app.config['DEBUG'] = True
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 mongo = PyMongo(app)
 # flask_cors: Cross Origin Resource Sharing (CORS), making cross-origin AJAX possible.
-
-# CORS(app)
-# async_mode = None
-# socketio = SocketIO(app, async_mode=async_mode)
-
-
-# CORS(app)
+CORS(app)
 async_mode = None
-socketio = SocketIO(app)
-
+socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 
 
