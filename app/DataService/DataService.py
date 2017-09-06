@@ -86,18 +86,18 @@ class DataService:
             if "small_clusters" in record:
                 # Hack since no people count for each clusters, I assign each small clusters an average value to the last element
                 vag_ppl_cnt = 0
-                if len(record['small_clusters']) != 0:
-                    vag_ppl_cnt = int(record['ppl_cnt'] / len(record['small_clusters']))
+
 
                 for index, c in enumerate(record['small_clusters']):
                     # record['small_clusters'][index] = c[:-1]
                     # print('len', len(record['small_clusters'][index][len(c) - 1]))
 
-                    r_path = record['small_clusters'][index][len(c)-1]
+                    r_path = record['small_clusters'][index][6]
                     if type(r_path) is not list:
-                        record['small_clusters'][index][len(c) - 1] = None
-                    if len(record['small_clusters'][index]) != 0:
-                        record['small_clusters'][index].append(vag_ppl_cnt)
+                        # record['small_clusters'][index][len(c) - 1] = None
+                        record['small_clusters'][index][6] = None
+                    # if len(record['small_clusters'][index]) != 0:
+                    #     record['small_clusters'][index].append(vag_ppl_cnt)
 
             recent_arr.append(record)
 
