@@ -12,6 +12,7 @@ dataService = DataService('config.txt')
 station_ids = ['admiralty']
 @app.route('/')
 def index():
+    print('visit')
     return app.send_static_file('index.html')
 
 # @app.route('/test')
@@ -20,6 +21,7 @@ def index():
 
 @app.route('/getStationMap',  methods = ['POST'])
 def get_map():
+    print('get map')
     post_data = json.loads(request.data.decode())
     station_id = post_data['StationId']
     map = dataService.get_map(station_id)
@@ -27,6 +29,7 @@ def get_map():
 
 @app.route('/getLegendConfiguration',  methods = ['POST'])
 def get_legend_config():
+    print('get_legend_config')
     post_data = json.loads(request.data.decode())
     station_id = post_data['StationId']
     config = dataService.get_legend_config(station_id)
@@ -35,6 +38,7 @@ def get_legend_config():
 # getRecordWithTimeRange
 @app.route('/getRecordWithTimeRange',  methods = ['POST'])
 def get_realtime_data():
+    print('get_realtime_data')
     post_data = json.loads(request.data.decode())
     station_id = post_data['StationId']
     start_time = post_data['starttime']
@@ -46,6 +50,7 @@ def get_realtime_data():
 # getRecordWithTimeRange
 @app.route('/getStationRecord',  methods = ['GET'])
 def get_station_record():
+    print('get_station_record')
     with open('config/point_positions2.csv', 'r') as input:
         line = input.readline()
         schemas = line.split(' ')
@@ -67,6 +72,7 @@ def get_station_record():
 # getPeopleCount (Added by Qing Du)
 @app.route('/getPeopleCount', methods = ['POST'])
 def get_people_count():
+    print('get_people_count')
     get_data = json.loads(request.data.decode())
     day = get_data['day']
     time = get_data['time']
