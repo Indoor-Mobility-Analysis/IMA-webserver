@@ -67,11 +67,22 @@ class DataService:
                 'stationId': station_id,
                 'legendConfig': legend_config}
 
+    def hack_find_largest_time(self, c_name):
+        # Should be packaged
+        collection = self.db[c_name]
+        largest_record = collection.find().sort('time_stamp',pymongo.DESCENDING).limit(1)
+        records = list(largest_record)
+        if len(records) == 0:
+            return None
+        return records[0]['time_stamp']
+
+
     def get_recent_records_single_collection(self, c_name, start, time_range):
         collection = self.db[c_name] # people_activity / posts
         num = 0
         recent_arr = []
         start_time = time.time()
+
         for record in collection.find({
             'time_stamp':{
                 '$gte': start,
@@ -85,19 +96,12 @@ class DataService:
             # small cluster
             if "small_clusters" in record:
                 # Hack since no people count for each clusters, I assign each small clusters an average value to the last element
-                vag_ppl_cnt = 0
-
 
                 for index, c in enumerate(record['small_clusters']):
-                    # record['small_clusters'][index] = c[:-1]
-                    # print('len', len(record['small_clusters'][index][len(c) - 1]))
-
                     r_path = record['small_clusters'][index][6]
                     if type(r_path) is not list:
-                        # record['small_clusters'][index][len(c) - 1] = None
                         record['small_clusters'][index][6] = None
-                    # if len(record['small_clusters'][index]) != 0:
-                    #     record['small_clusters'][index].append(vag_ppl_cnt)
+
 
             recent_arr.append(record)
 
@@ -130,4 +134,6 @@ class DataService:
 
 if __name__ == '__main__':
     dataService = DataService(None)
-    dataService.get_recent_records(0, 100)
+    # vc = dataService.get_recent_records(100000000, 1000001000)
+    vc = dataService.hack_find_largest_time('people_activity_600')
+    print('vc', vc)

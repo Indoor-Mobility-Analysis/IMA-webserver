@@ -83,6 +83,7 @@ def background_thread():
     """Example of how to send server generated events to clients."""
     count = 0
     print('run here')
+    largest_time = dataService.hack_find_largest_time('people_activity_600')
     global start_time
     while True:
         socketio.sleep(3)
@@ -90,8 +91,8 @@ def background_thread():
         print("Timing: ", start_time, time_gap)
         data = dataService.get_recent_records(start_time, time_gap)
         start_time += 3
-        # print('data', data)
-        # print('\n\n')
+        # Hack: not for realtime data, the largestTime is set to 0 so that the server can continuous run
+        start_time = 0 if start_time > largest_time else start_time
 
         print('sent data')
         for station_name in station_ids:
