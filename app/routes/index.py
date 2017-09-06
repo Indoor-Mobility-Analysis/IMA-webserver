@@ -87,7 +87,7 @@ def background_thread():
         # print('data', data)
         # print('\n\n')
 
-
+        print('sent data')
         for station_name in station_ids:
             socketio.emit('my_response',
                       {'data': data, 'count': count},
