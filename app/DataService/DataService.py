@@ -109,7 +109,8 @@ class DataService:
 
     def get_recent_records(self, start, time_range):
         # people_activity = self.get_recent_records_single_collection('people_activity', start, time_range)
-        people_activity = self.get_recent_records_single_collection('people_activity_600', start, time_range)
+        people_activity = self.get_recent_records_single_collection('people_activity_merge', start, time_range)
+        # all_people_activity
         ticket_record = self.get_recent_records_single_collection('tickets_ADM', start, time_range)
 
         return {
